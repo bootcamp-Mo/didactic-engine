@@ -2,7 +2,7 @@
 
 This tutorial is looking to explain a regex expression that checks for a valid IPv4 address in a string: 
 ```regex
-(^*(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3} )
+(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}
 ```
 I found this regex expression, [regex for ip address(ipv4)](https://ihateregex.io/expr/ip/), at i<span style='color: red;'>HATE</span>Regex.
 
