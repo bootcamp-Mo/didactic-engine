@@ -27,10 +27,16 @@ What were are working with:
 4. The IPv4 address must contain three periods and four octets
 
 ## Summary
+- A regular expression is a pattern that can be used to check to see if a string contains
+a specific pattern.
+- A regular expression is a sequence of characters that define a search pattern.
+- A regular expression is used with the `match()` method to find a match in a string.
+- A regular expression is used with the `test()` method to test if a string contains a match
+or not.
+- A regular expression is used with the `replace()` method to replace a match in a string.
+- A regular expression is used with the `split()` method to split a string into an array of
+substrings.
 
-```regex
- (\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3} 
-```
 This expression has two parts, 
 
 `(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)` 
@@ -39,22 +45,7 @@ This expression has two parts,
 `(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3} `
 
 
-
-```javascript
-const inputString = "The IP address is 192.168.0.1, and the port is 8080";
-const regex = /(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/;
-
-// Validating and extracting the IP address
-const ipAddressMatch = inputString.match(regex);
-if (ipAddressMatch) {
-  const ipAddress = ipAddressMatch[0];
-  console.log("Valid IP address:", ipAddress);
-} else {
-  console.log("No valid IP address found.");
-}
-```
-
-The first part of this expression is only looking at the first octet, <span title="first octet" style='color: hotpink;'>x</span> . x . x . x , the larges the x value can be is 255, this is an thing IPv4 address, if it matches the one of the three patterns:
+The first part of this expression is only looking at the first octet, <span title="first octet" style='color: hotpink;'>x</span> . x . x . x , the largest the octet <span title="first octet" style='color: hotpink;'>x</span> value can be is 255, this is an IPv4 address thing, this expressions uses three alternatives patterns catch any matches:
 
 1. `25[0-5]`: The largest the decimal value can be is 255, this is checking that if the first two digits are 25 then the third can only be 5 or less, so the the value it can range between 250-255.
 
@@ -62,15 +53,16 @@ The first part of this expression is only looking at the first octet, <span titl
 
 3. `[01]?[0-9][0-9]`: This pattern is different than that last two and it has a `?` we are not going to address right now, we want to look at the range. The first two patterns check if there was a match decimal values between 200 and 255, since each octet can be between 0 and 255 we now need to check for decimal values between 0 and 199. `[01]` it can be a 0 or a 1, ignore th `?` for now, this `[0-9]` is are range 0-9 for the second digit, and the same range `[0-9]` but for the first digit. 
 
-Any decimal value between 0 and 255 will pass the check, 256 and above will fail.
+Any decimal value between 0 and 255 will pass the check, 256 and above will fail. 
 
 This first part was just to look and see if this might be a valid IPv4 address by checking is there is a octet that matches the pattern, if it did not pass at this fist check, then there is no need to look to see if anything else passes. 
 
-If it does pass, then we want to spend the time checking the rest of the Regex expression and that is what the second part of the expression does, it has the same repeating pattern as the first part `(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)` but it is surrounded by `(\. ){3}`, this is repeating the same pattern as above expect it does it three times `{3}` if it see a `.` in the correct spot all three and each time it checks the decimal value to see if it is between 0-255, then it will be a valid IPv4. 
+If it does pass, then we want to spend the time checking the rest of the Regex expression and that is what the second part of the expression does, it has the same repeating pattern as the first part `(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)` but it is surrounded by `(\.(...)){3}` this ensures that the pattern is repeated three times and is separated by dots. If that string doesn't match the pattern then it doesn't pass.
 
-Ok there was a lot that we skipped, like this `|` what is that, after dissecting this expression we are left with these  we will go over the things I did not cover like:
+Ok there was a lot that we skipped, like this `|`  what is that, after dissecting this expression we are left with these meta characters:
 
- `(), \b, [], |, ?, \, {}`
+ `()`, `[]`, `|`, `?`, `\b`, `\.`, `{}`
+
 
 ## Table of Contents
 
@@ -85,20 +77,52 @@ Ok there was a lot that we skipped, like this `|` what is that, after dissecting
 
 ## Regex Components
 	(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}
-	()
-
-	[]
-	| 
-	\.
-	?
 ### Anchors
-	Anchors are used to match a position before or after a character.
-		\b
+Anchors in regex are used to represent a position in a string. The two most common anchors are the `^`  and the `$`,  theses are not it this expression but its still important to cover them.
 
-		^ $ 
+The `^` represents the start of a line/new string, when this is used in an expression it indicates to the pattern that the pattern should only match if the pattern appearers at the start of the line/new string. 
+
+		```
+		If the pattern was ^look a passing string would be 'look how fast they were', a non-passing string would be 'I asked Marty to look for the spoon.' because of the `^` the pattern has to be at the start of a line/ new string. 
+		```
+
+The `$` on the other hand matches everything up until the end of the current line or new string.
+		```
+		If the pattern was duck$ then a passing string would be 'Wow, look at that duck' because the pattern we are looking for is for the duck to be at the end, 'If Nilly got a duck I want one too' this would not pass because that pattern says that duck had to be at the end of the line/ new string. 
+		```
+
+The anchor that is in this regex expression is `\b`, this is a boundary word,  is its not looking at the start of a string like a `^` or the end of the string like the `$`,  for the pattern but its looking for a position where a word character is not followed by another word character. A word character is alphanumeric or an underscore, `\b` is the boundary between word characters and non word characters.
+
+Word characters:
+
+    Alphabetic letters: a, B, z
+    Digits: 0, 1, 9
+    Underscore: _
+
+Non-word characters:
+
+    Space:   (space character)
+    Punctuation marks: . , ! ?
+    Special characters: @, #, %
+    Mathematical symbols: + - * /
+    Brackets and parentheses: () [] {}
+    Quotes: " '
+
+In our expression `\b` is uses three times to check to make sure that we are only matching with standalone words.
+
+For example:
+
+	'MyIPv4Addressis255.255.255.255' would not pass the match because this is a lump of character words and the pattern says that for the pattern to pass there can not be character words in front of the `25`, and in this case there is the word character `s` is before the `25` so it does not pass.
+
+	'My IPv4 address is 255.255.255.255' does pass because when the pattern `\b25[0-5]` checks it looks to see if there is 25 and that the character of it in a non character word, in this case it is a space. 
+
 ### Quantifiers
-	?
+Quantifiers define how many times the preceding character or group should match. Above we mention that the second part of the regex expression repeated three times, the expression knows that there should be 3 exact matches because of the`{3}`.
+
+`{n}` is a quantifier that specifies the exact number of repetitions for the preceding element or group.
+
 ### Grouping Constructs
+Grouping construct allow you to group parts of the expression together and apply quantifiers or other operators to the group as a whole. grouping 
 
 ### Bracket Expressions
 
@@ -109,6 +133,22 @@ Ok there was a lot that we skipped, like this `|` what is that, after dissecting
 ### Flags
 
 ### Character Escapes
+
+### Code Example 
+
+```Javascript
+const inputString = "The IP address is 192.168.0.1, and the port is 8080";
+const regex = /(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}/;
+
+// Validating and extracting the IP address
+const ipAddressMatch = inputString.match(regex);
+if (ipAddressMatch) {
+  const ipAddress = ipAddressMatch[0];
+  console.log("Valid IP address:", ipAddress);
+} else {
+  console.log("No valid IP address found.");
+}
+```
 
 ## Author
 [iHateRegex](https://ihateregex.io/expr/ip/)
