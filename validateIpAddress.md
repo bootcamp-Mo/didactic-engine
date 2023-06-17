@@ -87,8 +87,10 @@ The `^` represents the start of a line/new string, when this is used in an expre
 		```
 
 The `$` on the other hand matches everything up until the end of the current line or new string.
+
+
 		```
-		If the pattern was duck$ then a passing string would be 'Wow, look at that duck' because the pattern we are looking for is for the duck to be at the end, 'If Nilly got a duck I want one too' this would not pass because that pattern says that duck had to be at the end of the line/ new string. 
+		If the pattern was duck$ then a passing string would be 'Wow, look at that duck' because the pattern we are looking for is for the duck to be at the end, 'If Nilly got a duck, I want one too' this would not pass because that pattern says that duck had to be at the end of the line/ new string. 
 		```
 
 The anchor that is in this regex expression is `\b`, this is a boundary word,  is its not looking at the start of a string like a `^` or the end of the string like the `$`,  for the pattern but its looking for a position where a word character is not followed by another word character. A word character is alphanumeric or an underscore, `\b` is the boundary between word characters and non word characters.
