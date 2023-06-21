@@ -1,4 +1,4 @@
-# Regular Expressions: Matching Hexadecimal Colors
+# Regular Expressions: IPv4 address
 
 This tutorial is looking to explain a regex expression that checks for a valid 
 IPv4 address in a string: 
@@ -58,8 +58,12 @@ This expression has two parts,
 The first part of this expression is only looking at the first octet, 
 <span title="first octet" style='color: hotpink;'>x</span> . x . x . x , 
 the largest the octet <span title="first octet" style='color: hotpink;'>x</span> 
-value can be is 255, this is an IPv4 address thing, this expressions uses three 
-alternatives patterns catch any matches:
+value can be is 255, 
+<span title="first octet" style='color: hotpink;' >xxx</span> . xxx . xxx . xxx ,
+this is another IPv4 address pattern showing an address can have up to three 
+digit for each octet. 
+
+This expressions uses three alternatives patterns catch any matches:
 
 1. `25[0-5]`: The largest the decimal value can be is 255, this is checking 
 that if the first two digits are 25 then the third can only be 5 or less, 
@@ -188,17 +192,24 @@ Bracket expressions are a way to define a set of characters that can match a
 character at a specific position in the input string. Brackets can hold ranges 
 to specify a contiguous set of characters, or list individual characters. 
 
-<span title="first octet" style='color: hotpink;'>xxx</span> . xxx . xxx . xxx 
+Looking at the IPv4 address that  has three digit value for each octet,
 
-Each octet can have digit value between 0-255, a valid IPv4 address octet can 
-have three positions,   
+<span title="first octet" style='color: hotpink;'>xxx</span>. xxx . xxx . xxx , 
+we can see that there can be three positions in a octet, 123.123.123.123, 
+bracket expressions are used to make sure that the pattern is look at each 
+position of the string and comparing it the digit value that is defined by the
+bracket contents.
+
+Each octet can have a decimal value between 0-255, a valid IPv4 address octet can 
+have up to three positions for each digit, _ _ _ . xxx . xxx . xxx . xxx
 
 In our expression the brackets are used to determine three range groups. 
 IPv4 addresses can not be a number greater than 255, the first range check 
-is `25[0-5]` this is saying that there should be a 2, a 5, and something that 
-can be 0 or 5 or the numbers that range between it, 255-250. This is saying that that 
-number in the position of the range can only be after the `25_`, not `2_5`, or `_25`, 
-because it matches at a specific position. 
+is `25[0-5]` this is saying that the pattern it is checking for is 2, 5, and 
+something that can be 0 or 5 or the numbers that range between it, 255-250. The 
+bracket is in the third position this means the digit can only be in the position 
+after the `25_`, not `2_5`, or `_25`, because it has to matches at a specific 
+position. 
 
 The second range group is `2[0-4][0-9]`, this says that fist there is a 2 and in 
 the next position is something between `0-4` and in the third position there is 
@@ -208,11 +219,11 @@ range of 249-200.
 The third use of brackets is `[01]?[0-9][0-9]?` this one is a little complicated 
 because of the `?`, [what is that](#the-or-operator), but the brackets are the 
 same so we are just cover the brackets for this part. In the first position, `[01]`, 
-the brackets is looking for a 0 or a 1 for the first position `x`, if there is a 
-second position if is looking to see if that digit value is in the `0-9` range 
-and the last bracket `[0-9]` is doing the same for the last position, this will 
-find the decimal value between 199-0.
-
+the brackets is looking for a 0 or a 1 for the first position, if that passes then 
+the next check is at the second position, and if there is a digits who's value 
+is in the `0-9` range and it check the last position for a digit value of `[0-9]`, 
+is the same as the second position last, this will find the decimal value 
+between 199-0.
 
 ### Character Classes
 
