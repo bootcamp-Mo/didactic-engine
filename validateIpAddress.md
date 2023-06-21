@@ -56,10 +56,10 @@ This expression has two parts,
 
 
 The first part of this expression is only looking at the first octet, 
-<span title="first octet" style='color: hotpink;'>x</span> . x . x . x , 
-the largest the octet <span title="first octet" style='color: hotpink;'>x</span> 
+<span title="first octet" style='color: #bf44d0 ;'>x</span> . x . x . x , 
+the largest the octet <span title="first octet" style='color:  #bf44d0;'>x</span> 
 value can be is 255, 
-<span title="first octet" style='color: hotpink;' >xxx</span> . xxx . xxx . xxx ,
+<span title="first octet" style='color: #bf44d0 ;' >xxx</span> . xxx . xxx . xxx ,
 this is another IPv4 address pattern showing an address can have up to three 
 digit for each octet. 
 
@@ -174,27 +174,47 @@ For example:
   there is 25 and that the character of it in a non character word, in this case 
   it is a space. 
 
+### Grouping Constructs
+Grouping construct `()` allow you to group parts of the expression together and 
+apply quantifiers or other operators to the group as a whole. The parentheses 
+group alternatives together, allowing logical OR operations,
+
+In this expression 
+we use grouping constructs twice that is how we are able to have a two part 
+pattern, the first part `(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)` which 
+checks the string for a pattern that starts with a 2 or 1 or 0 and has a 
+non-word character proceeding it. 
+
+The second part of the expression is what checks the string for the dot in 
+the IPv4 address pattern. 
+x <span title="first octet" style='color: #bf44d0 ;'>.</span> x . x . x 
+The second part has two grouping construct `(\. ...){3}` and inside that group 
+is the last use of `()` is `(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)` this is a 
+group of decimal value patterns that check each digit for its value and position 
+in the pattern, the whole second part of the expression checks for a pattern 
+match the same way for all three remaining octet, it first checks for a `.` and 
+if so it checks the string input for a decimal range of 0-255.  
+
 ### Quantifiers
 Quantifiers define how many times the preceding character or group should match. 
-Above we mention that the second part of the regex expression repeated three 
-times, the expression knows that there should be 3 exact matches because 
-of the`{3}`.
+Above we mention that the second part of the regex expression is repeated three 
+times, this `(\. ...){3}` is how the expression knows to repeat. The `()` as we 
+now know are grouping construct are first matching with the `.` and the it 
+checks for the decimal range of 0-225. The `{3}` is multiplying the pattern by 
+three because after the first part there are only three reaming octet each one 
+is preceded by a dot.
 
 `{n}` is a quantifier that specifies the exact number of repetitions for the 
 preceding element or group. This expression had 3 repetitions
-
-### Grouping Constructs
-Grouping construct allow you to group parts of the expression together and 
-apply quantifiers or other operators to the group as a whole. 
 
 ### Bracket Expressions
 Bracket expressions are a way to define a set of characters that can match a 
 character at a specific position in the input string. Brackets can hold ranges 
 to specify a contiguous set of characters, or list individual characters. 
 
-Looking at the IPv4 address that  has three digit value for each octet,
+Looking at the IPv4 address that has three digit value for each octet,
 
-<span title="first octet" style='color: hotpink;'>xxx</span>. xxx . xxx . xxx , 
+<span title="first octet" style='color:  #bf44d0 ;'>xxx</span>. xxx . xxx . xxx , 
 we can see that there can be three positions in a octet, 123.123.123.123, 
 bracket expressions are used to make sure that the pattern is look at each 
 position of the string and comparing it the digit value that is defined by the
@@ -225,14 +245,28 @@ is in the `0-9` range and it check the last position for a digit value of `[0-9]
 is the same as the second position last, this will find the decimal value 
 between 199-0.
 
-### Character Classes
-
 ### The OR Operator
+The OR operator `|` is used in regular expressions to match either the expression 
+preceding it or the expression following it. It allows you to define alternative 
+patterns within a regular expression. In our expression 
+`(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)`, the OR operator is used to 
+specify alternative patterns for matching the octets of an IPv4 address.
 
-### Flags
+In the first part of the expression `(\b25[0-5]|\b2[0-4][0-9]|\b[01]?[0-9][0-9]?)` 
+has three alternative patterns separated by the OR operator `|`. It will match 
+either `25[0-5]` with the values between 250 and 255, `2[0-4][0-9]` values between 200 and 249, 
+or `[01]?[0-9][0-9]?` values between 0 and 199 for the first octet of the IPv4 address.
+
+The OR operator allows for flexibility in matching different possibilities 
+within a regular expression.
 
 ### Character Escapes
+Character escapes in regular expressions are used to match specific characters 
+that have special meaning within the regex syntax. These characters are preceded 
+by a backslash `\` to indicate that they should be treated as literal characters.
 
+In the seconde part of our expression we use the backslash `\` character to 
+match the `.` of an IPv4 address pattern
 ### Code Example 
 
 ```Javascript
@@ -250,8 +284,10 @@ if (ipAddressMatch) {
 ```
 
 ## Author
-[iHateRegex](https://ihateregex.io/expr/ip/)
-A short section about the author with a link to the author's GitHub profile (replace with your information and a link to your profile)
+Hello I'm Mo, I'm a person who is learning to code, you can check out what 
+projects I have been working on and how my sentence smashing is coming along by 
+going to my gitHub at [Bootcamp-Mo](https://github.com/bootcamp-Mo). 
 
-
-[geongeorge](https://github.com/geongeorge) owner of i<span style='color: red;'>HATE</span>Regex 
+I found this expression on the website [iHateRegex](https://ihateregex.io/expr/ip/) 
+it was created by [geongeorge](https://github.com/geongeorge) who is the owner 
+of i<span style='color: red;'>HATE</span>Regex 
